@@ -1,0 +1,50 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+main{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    align-content: center;
+}
+ol, li{
+    border-radius: 0.3rem;
+}
+ol{
+    margin: 2rem 0;
+    padding: 1rem;
+    width: 20rem;
+    background-color: tomato;
+    list-style: none;
+}
+li{
+    margin:1rem 0;
+    width: 100%;
+    height: 4rem;
+    font-size: 1.1rem;
+    background-color: cornsilk;
+    color: tomato;
+    text-align: center;
+    line-height: 3.5;
+}
+li.dragging{
+    opacity: 0.3;
+}
+.phantom{
+    width: 8rem;
+    height: 8rem;
+    position: absolute;
+    left: -100vw;
+    color: lightblue;
+}
+.paper-bin{
+    width: 4rem;
+    height: 4rem;
+/* - PON UN ICONO DE PAPELERA PARA ELIMINAR PÁRRAFOS (ESTA IMAGEN PUEDE VALER: HTTPS://ENCRYPTED-TBN0.GSTATIC.COM/IMAGES?Q=TBN:AND9GCSSMWEEC0TULZOJFWFAODOHJUW9WJXHBDBIRG&USQP=CAU) */
+    background-image: url( https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSMWeEC0tULzOjfWFAOdOHjUw9WjXhBDbirg&usqp=CAU);
+    background-size: contain;
+    
+}
