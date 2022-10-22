@@ -1,24 +1,27 @@
 window.onload = emptyList
+// global vars**
+const list = document.querySelector('.list')
+// inputs form
+const name =   document.querySelector('.name')
+const price =  document.querySelector('.price')
+
 // empty list
 function emptyList(){
-    const ol =  document.querySelector('.list')
+    const ol = list
     
     if(ol.childElementCount === 0){
-        console.log('if');
         const mesg = document.createElement('span')
         mesg.classList.add('mesg')
         mesg.style.display = 'inline-block'
+
         const txt = document.createTextNode('Lista vacía, agrega un nuevo ítem')
 
         ol.appendChild(mesg)
-        mesg.appendChild(txt)
-    }else{
-        console.log('cartel eliminado');
-// todo: ocultar el cartel creado
-        // mesg.style.display = 'none'
-
+        return mesg.appendChild(txt)
     }
-    console.log(ol.childElementCount);
+    if(ol.childElementCount > 0){
+        return ol.children[0].style.display = 'none'
+    }
 
 }
 // form add item
@@ -31,24 +34,45 @@ function prevent(){
     })
 }
 
-document.querySelector('.btn').addEventListener('click', () => {
+const event = document.querySelector('.btn').addEventListener('click', () => {
+    const nameVal =  name.value
+    const priceVal = price.value
     prevent()
-    newItem()
+    
+    if(nameVal.length < 1 || priceVal.length < 1){
+        console.log('input vacio');
+    }else if(list.childElementCount < 11){
+        emptyList()
+        return newItem()
+    }else{
+        return alert('Lista llena')
+    }
+    
 })
+// iterator
+function* idGen(){
+    let id = 0;
+    while(true){
+        id++
+        if(id === 10){
+            alert('Lista llena')
+            return id
+        }
+        yield id
+    }
+}
+const id = idGen()
 
 // new item
 function newItem(){
-    // inputs value
-    const name =   document.querySelector('.name')
-    const price =  document.querySelector('.price')
     // parentnode
-    const ol =  document.querySelector('.list')
+    const ol =  list//document.querySelector('.list')
     //new html element
     const li =  document.createElement('li')  
     li.classList.add('paragraph', 'item')
     li.setAttribute('draggable', 'true')
     // todo: sett id 
-    li.setAttribute('id', 'p-5')
+    li.setAttribute('id', `p-${id.next().value}`)
     // li child
     const ctr       = document.createElement('div')  
     ctr.classList.add('ctr')

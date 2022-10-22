@@ -21,6 +21,7 @@ body{
     height: 100vh;
     display: grid;
     place-items: center;
+    scroll-behavior: smooth;
 }
 main{
     display: flex;
