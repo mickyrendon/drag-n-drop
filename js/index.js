@@ -31,23 +31,24 @@ function prevent(){
     addF.addEventListener('submit', e => {
         console.log('prevenido');
         e.preventDefault()
+        name.focus()
+        return name.value = '', price.value = ''
+
     })
 }
 
 const event = document.querySelector('.btn').addEventListener('click', () => {
-    const nameVal =  name.value
-    const priceVal = price.value
+    let nameVal =  name.value
+    let priceVal = price.value
     prevent()
     
     if(nameVal.length < 1 || priceVal.length < 1){
-        console.log('input vacio');
+        alert('Llene los dos campos con sus respectivos carácteres');
     }else if(list.childElementCount < 11){
-        emptyList()
-        return newItem()
+        return emptyList(), newItem(), dragStart()
     }else{
         return alert('Lista llena')
     }
-    
 })
 // iterator
 function* idGen(){
@@ -71,7 +72,6 @@ function newItem(){
     const li =  document.createElement('li')  
     li.classList.add('paragraph', 'item')
     li.setAttribute('draggable', 'true')
-    // todo: sett id 
     li.setAttribute('id', `p-${id.next().value}`)
     // li child
     const ctr       = document.createElement('div')  
@@ -105,41 +105,46 @@ paperBin.addEventListener("drop", e => {
 })
 
 // drag & drop
-const section = document.querySelectorAll('.section')
-const item = document.querySelectorAll('.item')
+function dragStart(){
+    const item = document.querySelectorAll('.item')
+    console.log(item);
 
-item.forEach( itm =>{
-
-    itm.addEventListener('dragstart', e =>{
-        console.log(`dragging box number ${itm.innerText}`);
-        // adding class
-        itm.classList.add('dragging')
-        // it returns id because making reference to html id element
-        // todo: hacer referencia a la funcion de id no al selector id
-        e.dataTransfer.setData('id', itm.id)
-        // const phantom = document.querySelector('.phantom')
-        // e.dataTransfer.setDragImage(phantom, 0, 0)
+    
+    item.forEach( itm =>{
+        itm.addEventListener('dragstart', e =>{
+            console.log(`dragging box number ${itm.innerText}`);
+            // adding class
+            itm.classList.add('dragging')
+            // it returns id because making reference to html id element
+            // todo: hacer referencia a la funcion de id no al selector id
+            e.dataTransfer.setData('id', itm.id)
+            // const phantom = document.querySelector('.phantom')
+            // e.dataTransfer.setDragImage(phantom, 0, 0)
+            console.log(itm.id);
+        })
+        
+        itm.addEventListener('dragend', () =>{
+            console.log('dragging ended');
+            itm.classList.remove('dragging')
+        })
+        dragOver()
     })
+    
+   
+}
+function dragOver(){
+    const list = document.querySelector('.list')
 
-    itm.addEventListener('dragend', () =>{
-        // console.log('dragging ended');
-        itm.classList.remove('dragging')
-    })
-})
-
-
-section.forEach(sctn =>{
-
-    sctn.addEventListener('dragover', e =>{
+    list.addEventListener('dragover', e =>{
         e.preventDefault()
     })
 
-    sctn.addEventListener('drop', e =>{
+    list.addEventListener('drop', e =>{
         console.log('drop');
         const idP = e.dataTransfer.getData('id')
         console.log(`paragraph id ${idP}` );
         // getting id from idP 
         const prgId = document.getElementById(idP)
-        sctn.append(prgId)
+        list.append(prgId)
     })
-})
+}
