@@ -1,10 +1,31 @@
 window.onload = emptyList
 // global vars**
 const list = document.querySelector('.list')
+const id = idGen()
 // inputs form
 const name =   document.querySelector('.name')
 const price =  document.querySelector('.price')
-
+// library properties
+Sortable.create(list, {
+    animation: 150,
+    group: 'Lista',
+    store: {
+        set: (sortable)=>{
+            const listOrder = sortable.toArray()
+            console.log(listOrder);
+            localStorage.setItem(sortable.options.group.name, listOrder.join(', '))
+        },
+        get: (sortable)=>{
+            const order = localStorage.getItem(sortable.options.group.name)
+            order ? order.split(',') : []
+        },
+    }
+})
+// /////////////////
+function localStrg(){
+    const li = document.querySelectorAll('.item')
+    li ? console.log(li) : []
+}
 // empty list
 function emptyList(){
     const ol = list
@@ -29,7 +50,6 @@ function prevent(){
     const addF = document.forms['form-add']
 
     addF.addEventListener('submit', e => {
-        console.log('prevenido');
         e.preventDefault()
         name.focus()
         return name.value = '', price.value = ''
@@ -45,7 +65,7 @@ const event = document.querySelector('.btn').addEventListener('click', () => {
     if(nameVal.length < 1 || priceVal.length < 1){
         alert('Llene los dos campos con sus respectivos carácteres');
     }else if(list.childElementCount < 11){
-        return emptyList(), newItem(), dragStart()
+        return emptyList(), newItem(), dragStart(), localStrg()
     }else{
         return alert('Lista llena')
     }
@@ -62,25 +82,23 @@ function* idGen(){
         yield id
     }
 }
-const id = idGen()
-
 // new item
 function newItem(){
     // parentnode
-    const ol =  list//document.querySelector('.list')
+    const ol = list
     //new html element
-    const li =  document.createElement('li')  
-    li.classList.add('paragraph', 'item')
-    li.setAttribute('draggable', 'true')
-    li.setAttribute('id', `p-${id.next().value}`)
+    const li = document.createElement('li')  
+          li.classList.add('paragraph', 'item')
+          li.setAttribute('draggable', 'true')
+          li.setAttribute('data-id', `p-${id.next().value}`)
     // li child
     const ctr       = document.createElement('div')  
-    ctr.classList.add('ctr')
+          ctr.classList.add('ctr')
     const spanName  = document.createElement('span')  
     const spanPrice = document.createElement('span')  
     // adding text content
-    const liVal = document.createTextNode(name.value)
-    const priceVal = document.createTextNode(price.value)
+    const liVal     = document.createTextNode(name.value)
+    const priceVal  = document.createTextNode(price.value)
 
     ol.appendChild(li)
     li.appendChild(ctr)
@@ -88,63 +106,59 @@ function newItem(){
     ctr.appendChild(spanPrice)
     spanName.appendChild(liVal)
     spanPrice.appendChild(priceVal)
+
+    return li
 }
 
-// paperBin
-const paperBin = document.querySelector(".paper-bin")
-
-paperBin.addEventListener("dragover", e => {
-    e.preventDefault()
-    e.dataTransfer.dropEffect = "copy"
-})
-
-paperBin.addEventListener("drop", e => {
-    const idPrg = e.dataTransfer.getData("id")
-    const removeP = document.getElementById(idPrg)
-    removeP.remove()
-})
 
 // drag & drop
 function dragStart(){
     const item = document.querySelectorAll('.item')
-    console.log(item);
-
     
     item.forEach( itm =>{
         itm.addEventListener('dragstart', e =>{
-            console.log(`dragging box number ${itm.innerText}`);
             // adding class
             itm.classList.add('dragging')
-            // it returns id because making reference to html id element
-            // todo: hacer referencia a la funcion de id no al selector id
-            e.dataTransfer.setData('id', itm.id)
-            // const phantom = document.querySelector('.phantom')
-            // e.dataTransfer.setDragImage(phantom, 0, 0)
-            console.log(itm.id);
         })
         
         itm.addEventListener('dragend', () =>{
-            console.log('dragging ended');
             itm.classList.remove('dragging')
         })
-        dragOver()
     })
     
    
 }
-function dragOver(){
-    const list = document.querySelector('.list')
+// function dragOver(itm){
+//     const list = document.querySelector('.list')
 
-    list.addEventListener('dragover', e =>{
-        e.preventDefault()
-    })
+//     list.addEventListener('dragover', e =>{
+//         e.preventDefault()
+//     })
 
-    list.addEventListener('drop', e =>{
-        console.log('drop');
-        const idP = e.dataTransfer.getData('id')
-        console.log(`paragraph id ${idP}` );
-        // getting id from idP 
-        const prgId = document.getElementById(idP)
-        list.append(prgId)
-    })
-}
+//     list.addEventListener('drop', e =>{
+//         const idP = e.dataTransfer.getData('id')
+//         console.log(`drop id ${idP}` );
+//         // getting id from idP 
+//         const prgId = document.getElementById(idP)
+//         // console.log(itm);
+//         // list.append(prgId)
+//     })
+//     // paperBin
+// function bin(){
+//     const paperBin = document.querySelector(".paper-bin")
+//     // Sortable.onRemove
+
+//     paperBin.addEventListener("dragover", e => {
+    //         e.preventDefault()
+    //         e.dataTransfer.dropEffect = "copy"
+//     })
+
+//     paperBin.addEventListener("drop", e => {
+//         const idPrg = e.dataTransfer.getData("id")
+//         const removeP = document.getElementById(idPrg)
+//         console.log('remover');
+//         removeP.remove()
+//         console.log('removido');
+//     })
+// }
+// }
